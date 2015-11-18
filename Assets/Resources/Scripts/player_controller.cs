@@ -34,7 +34,7 @@ public class player_controller : MonoBehaviour {
 		if (Input.GetKey (KeyCode.D)
 		 || Input.GetKey (KeyCode.RightArrow)) {
 			this.rigidbody2D.velocity = new Vector3(
-				    (_r ? this.rigidbody2D.velocity.x + PLAYER_SPEED : this.rigidbody2D.velocity.x),
+				(_r ? this.rigidbody2D.velocity.x + PLAYER_SPEED : this.rigidbody2D.velocity.x),
 					this.rigidbody2D.velocity.y
 				);
 		}
@@ -54,6 +54,12 @@ public class player_controller : MonoBehaviour {
 	void OnCollisionExit2D (Collision2D col) {
 		if (col.gameObject.name == "floor") {
 			isGrounded = false;
+		}
+	}
+
+	void OnTriggerEnter2D (Collider2D col) {
+		if (col.gameObject.name == "Orbs") {
+			GameObject.Find ("Orbs").GetComponent<OrbsSystem>().isTouched = true;
 		}
 	}
 }

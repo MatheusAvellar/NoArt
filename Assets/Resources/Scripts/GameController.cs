@@ -6,7 +6,13 @@ public class GameController : MonoBehaviour {
 	
 	private Text langTxt;
 	private Text playTxt;
-	
+
+	void Awake() {
+		//It works only on build :p
+		QualitySettings.vSyncCount = 0;
+		Application.targetFrameRate = 8;
+	}
+
 	void Start() {
 		PlayerPrefs.SetString ("lang", "EN");
 		langTxt = GameObject.FindGameObjectWithTag ("langBtn").GetComponent<Text> ();

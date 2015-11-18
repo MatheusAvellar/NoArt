@@ -1,10 +1,9 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\DialogueScript.cs">
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Resources\Scripts\OrbsSystem.cs">
     <Files>
-      <File FileName="Assets\Resources\Scripts\GameController.cs" Line="30" Column="26" />
-      <File FileName="Assets\player_controller.cs" Line="50" Column="22" />
-      <File FileName="Assets\DialogueScript.cs" Line="56" Column="43" />
+      <File FileName="Assets\Resources\Scripts\GameController.cs" Line="13" Column="34" />
+      <File FileName="Assets\Resources\Scripts\OrbsSystem.cs" Line="35" Column="35" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
