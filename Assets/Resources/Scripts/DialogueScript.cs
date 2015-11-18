@@ -8,6 +8,7 @@ public class DialogueScript : MonoBehaviour {
 	private string[] stringArray;
 	private GameObject conversation;
 	private GameObject conversationAddons;
+	private float speechDelay = 0.02f;
 	private Text txt;
 	private bool hasEnded;
 
@@ -15,17 +16,17 @@ public class DialogueScript : MonoBehaviour {
 		if (PlayerPrefs.GetString ("lang") == "PT") {
 			stringArray = new string[] {
 				"Você: O que... O que é este lugar? Como eu cheguei aqui?",
-				"????: Você está em um jogo. Um jogo sem arte, porém.",
-				"????: A arte deste jogo foi roubada, pelo bruto Rei Triângulo. Você deve impedí-lo!",
-				"Você: Tudo bem, mas como eu encontro ele?",
+				"????: Você está em um jogo. Um jogo sem arte.",
+				"????: A arte deste jogo foi roubada pelo bruto Rei Triângulo. Você deve impedí-lo!",
+				"Você: Tudo bem. Mas como eu encontro ele?",
 				"????: Ah, isso é simples. Assim como qualquer outro jogo de plataforma: Vá para a direita!"
 			};
 		} else {
 			stringArray = new string[] {
 				"You: Wha... What is this place? How did I get here?",
-				"???: You're inside a game. A game with no art, however.",
-				"???: The art of this game was stolen, by the evil Triangle King. You must recover it!",
-				"You: Okay, but how do I find him?",
+				"???: You're inside a game. A game with no art.",
+				"???: The art of this game was stolen by the evil Triangle King. You must recover it!",
+				"You: Alright. But how do I find him?",
 				"???: Oh, that's simple. Just like any other platform game: Head right!"
 			};
 		}
@@ -40,7 +41,7 @@ public class DialogueScript : MonoBehaviour {
 	void Update () {
 		if (Input.GetKeyDown (KeyCode.Space) && hasEnded) {
 			txt.text = "";
-			if (curSpeech < stringArray.Length) {
+			if (curSpeech < stringArray.Length - 1) {
 				curSpeech++;
 				StartCoroutine("Type");
 			} else {
@@ -53,7 +54,7 @@ public class DialogueScript : MonoBehaviour {
 		hasEnded = false;
 		conversationAddons.SetActive (hasEnded);
 		for (int i = 0; i < stringArray[curSpeech].Length; i++) {
-			yield return new WaitForSeconds(0.05f);
+			yield return new WaitForSeconds(speechDelay);
 			try {
 				txt.text += (stringArray[curSpeech][i]).ToString();
 			} catch {}
