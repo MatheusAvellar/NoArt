@@ -58,8 +58,8 @@ public class player_controller : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D (Collider2D col) {
-		if (col.gameObject.name == "Orbs") {
-			GameObject.Find ("Orbs").GetComponent<OrbsSystem>().isTouched = true;
+		if (col.gameObject.tag == "Orb") {
+			col.gameObject.GetComponent<OrbsSystem>().isTouched = true;
 		}
 	}
 }

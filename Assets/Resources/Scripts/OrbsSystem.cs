@@ -6,13 +6,20 @@ using UnityEngine.UI;
 public class OrbsSystem : MonoBehaviour {
 
 	private float _x, _y;
-	private int bounds;
-	public string reward;
-	private string[] rewards = new string[10];
 	private const bool O = false;
 	private const bool I = true;
-	private GameObject HUD;
 	public bool isTouched;
+	public string reward;
+	public int ID;
+
+	private GameObject HUD;
+	private Sprite orbImage;
+
+	private string[] rewards = {
+		"Beatifier Orb",
+		"HUD"
+	};
+
 
 	private float X {
 		get { return this.gameObject.transform.position.x; }
@@ -25,27 +32,30 @@ public class OrbsSystem : MonoBehaviour {
 	}
 
 	void Awake () {
-		HUD = GameObject.FindGameObjectWithTag ("HUD");
-		HUD.SetActive (O);
+		HUD = Resources.Load ("Prefabs/HUD") as GameObject;
+		orbImage = Resources.Load("Sprites/orb", typeof(Sprite)) as Sprite;
 	}
 
 	void Start () {
-		rewards [0] = reward;
-		this.gameObject.transform.GetChild (0).GetChild (0).gameObject.GetComponent<Text> ().text = rewards [0];
+		this.gameObject.transform.GetChild (0).GetChild (0).gameObject.GetComponent<Text> ().text = rewards [ID];
 	}
 
 	void Update () {
 		if (isTouched) {
 			GetReward ();
-			Destroy(this.gameObject);
 		}
 	}
 
 	private void GetReward() {
 		if (reward == rewards [0]) {
 			HUD.SetActive (I);
-
 			reward = string.Empty;
+			Destroy(this.gameObject);
+
+		} else if (reward == rewards [1]) {
+			GameObject.Find("Orbs").transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = orbImage;
+			Destroy(this.gameObject);
 		}
+
 	}	
 }
