@@ -14,12 +14,14 @@ public class OrbsSystem : MonoBehaviour {
 	public string reward;
 
 	private GameObject HUD;
-	public Sprite[] orbImage;
-	SpriteRenderer orbRenderer;
+	private GameObject Vignette;
+	private Sprite[] orbImage;
+	private GameObject[] orbRenderer;
 
 	private string[] rewards = {
 		"Beautifier Orb",
-		"HUD"
+		"HUD",
+		"Vignette"
 	};
 
 
@@ -35,13 +37,18 @@ public class OrbsSystem : MonoBehaviour {
 
 	void Awake () {
 		HUD = GameObject.FindGameObjectWithTag ("HUD") as GameObject;
+		Vignette = GameObject.FindGameObjectWithTag ("Vignette") as GameObject;
 		if(ID == 1) HUD.SetActive (O);
+		if(ID == 2) Vignette.SetActive (O);
 		orbImage = Resources.LoadAll<Sprite> ("Sprites/orb");
 	}
 
 	void Start () {
-		orbRenderer = GameObject.Find ("Orbs").transform.GetComponentInChildren<SpriteRenderer> ();
-		this.gameObject.transform.GetChild (0).GetChild (0).gameObject.GetComponent<Text> ().text = rewards [ID];
+		orbRenderer = GameObject.FindGameObjectsWithTag ("Orb");
+		for (int i = 0; i < orbRenderer.Length - 1; i++) {
+			orbRenderer[i].transform.GetComponentInChildren<SpriteRenderer> ();
+		}
+		this.gameObject.transform.GetChild (0).GetComponentInChildren<Text> ().text = rewards [ID];
 	}
 
 	void Update () {
@@ -51,12 +58,20 @@ public class OrbsSystem : MonoBehaviour {
 	}
 
 	private void GetReward() {
+
 		if (reward == rewards [0]) {
-			orbRenderer.sprite = orbImage[0];
+			for (int i = 0; i < orbRenderer.Length - 1; i++) {
+				orbRenderer[i].transform.GetComponentInChildren<SpriteRenderer> ().sprite = orbImage[0];
+			}
 			Destroy(this.gameObject);
 
 		} else if (reward == rewards [1]) {
 			HUD.SetActive (I);
+			reward = string.Empty;
+			Destroy(this.gameObject);
+
+		} else if (reward == rewards [2]) {
+			Vignette.SetActive (I);
 			reward = string.Empty;
 			Destroy(this.gameObject);
 		}
