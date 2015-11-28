@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SourceFile>C:/Users/matheus/Desktop/GitHub/NoArt/NoArt/Content/Fonts/PoiretOne.spritefont</SourceFile>
+  <SourceTime>2015-11-27T23:31:22.2446059-02:00</SourceTime>
+  <DestFile>C:/Users/matheus/Desktop/GitHub/NoArt/NoArt/Content/bin/Windows/Fonts/PoiretOne.xnb</DestFile>
+  <DestTime>2015-11-28T00:43:52.2058108-02:00</DestTime>
+  <Importer>FontDescriptionImporter</Importer>
+  <ImporterTime>2015-04-29T14:14:44-03:00</ImporterTime>
+  <Processor>FontDescriptionProcessor</Processor>
+  <ProcessorTime>2015-04-29T14:14:44-03:00</ProcessorTime>
+  <Parameters>
+    <Key>TextureFormat</Key>
+    <Value>Compressed</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>
