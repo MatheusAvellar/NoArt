@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Timers;
 
 namespace NoArt
 {
@@ -11,12 +12,37 @@ namespace NoArt
         SpriteBatch spriteBatch;
 
         int counter;
-        float alpha;
         bool isFadeIn;
+        float fadeAlpha;
+
+        int scene;
+        /*
+         * Scenes:
+         *     0 = Intro
+         *     1 = Menu
+         *     2 = Game
+         *     3 = Credits
+         *     4 = ?
+         */
 
         SpriteFont PoiretOne;
-        Vector2 ScreenCenter;
+        Vector2 ScreenCenterVector;
+        Texture2D bg;
 
+        int ScreenCenterX;
+        int ScreenCenterY;
+
+        int ScreenWidth;
+        int ScreenHeight;
+
+        int playerX;
+        int playerY;
+        int playerW;
+        int playerH;
+
+        bool controlsAreLocked;
+
+        #region START
         public Game1() : base()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -25,9 +51,10 @@ namespace NoArt
 
         protected override void Initialize()
         {
-            alpha = 1f;
+            fadeAlpha = 1f;
             isFadeIn = true;
-            counter = 0;
+            counter = scene = 0;
+            controlsAreLocked = true;
             base.Initialize();
         }
 
@@ -35,28 +62,31 @@ namespace NoArt
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
             PoiretOne = Content.Load<SpriteFont>("Fonts\\PoiretOne");
-     
-            ScreenCenter = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2,
-                graphics.GraphicsDevice.Viewport.Height / 2);
+            bg = Content.Load<Texture2D>("Images\\w");
+
+            ScreenWidth = graphics.GraphicsDevice.Viewport.Width;
+            ScreenHeight = graphics.GraphicsDevice.Viewport.Height;
+            ScreenCenterX = ScreenWidth / 2;
+            ScreenCenterY = ScreenHeight / 2;
+            ScreenCenterVector = new Vector2(ScreenCenterX, ScreenCenterY);
+
+            playerX = ScreenCenterX;
+            playerY = ScreenCenterY;
+            playerW = playerH = 1;
         }
+        #endregion
 
-
+    //----------------------------//
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed
-             || Keyboard.GetState().IsKeyDown(Keys.Escape)) {
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape)) {
                 Exit();
             }
-            counter++;
 
-            if (counter >= 100 && counter % 2 == 0) {
-                alpha = (alpha > 0 && isFadeIn) ? alpha - 0.05f
-                      : (alpha < 1 && !isFadeIn) ? alpha + 0.05f
-                      : alpha;
-                alpha = alpha < 0 ? 0 : alpha > 1 ? 1 : alpha;
-                Console.WriteLine(alpha);
-            } else if (counter == 255) {
-                isFadeIn = false;
+            if (scene == 0) {
+                updateIntro(gameTime);
+            } else if (scene == 1) {
+                updateGame(gameTime);
             }
 
             base.Update(gameTime);
@@ -64,14 +94,30 @@ namespace NoArt
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.WhiteSmoke);
             spriteBatch.Begin();
+
+            if (scene == 0) {
+                drawIntro(gameTime);
+            } else if (scene == 1) {
+                drawGame(gameTime);
+            }
+
+            spriteBatch.End();
+            base.Draw(gameTime);
+        }
+
+    //----------------------------//
+
+        #region INTRO
+        void drawIntro(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.WhiteSmoke);
 
             Vector2 FontOrigin = PoiretOne.MeasureString("NoArt") / 2;
             spriteBatch.DrawString(
                 PoiretOne,          // SpriteFont
                 "NoArt",            // Text
-                ScreenCenter,       // Position
+                ScreenCenterVector, // Position
                 Color.Black,        // Color
                 0,                  // Rotation
                 FontOrigin,         // Origin
@@ -79,13 +125,59 @@ namespace NoArt
                 SpriteEffects.None, // Effects (flip)
                 0.5f);              // Layer
 
-            Texture2D bg = Content.Load<Texture2D>("Images\\w");
             spriteBatch.Draw(bg, new Rectangle(0, 0,
                 graphics.GraphicsDevice.Viewport.Width,
-                graphics.GraphicsDevice.Viewport.Height), Color.White * alpha);
-
-            spriteBatch.End();
-            base.Draw(gameTime);
+                graphics.GraphicsDevice.Viewport.Height), Color.White * fadeAlpha);
         }
+        void updateIntro(GameTime gameTime)
+        {
+            counter++;
+
+            if (counter >= 100 && counter % 2 == 0) {
+                fadeAlpha = (fadeAlpha > 0 && isFadeIn) ? fadeAlpha - 0.05f
+                        : (fadeAlpha < 1 && !isFadeIn) ? fadeAlpha + 0.05f
+                        : fadeAlpha;
+                fadeAlpha = fadeAlpha < 0 ? 0 : fadeAlpha > 1 ? 1 : fadeAlpha;
+            } else if (counter == 255) {
+                isFadeIn = false;
+            } else if (counter == 399) {
+                counter = 0;
+                fadeAlpha = 1f;
+                scene = 1;
+            }
+        }
+        #endregion
+
+        #region GAME
+        void drawGame(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.LightGray);
+
+            spriteBatch.Draw(bg, new Rectangle(playerX, playerY, playerW, playerH), null, Color.Gray, 0f, Vector2.Zero, SpriteEffects.None, 0.5f);
+        }
+        void updateGame(GameTime gameTime)
+        {
+            if (playerW != 50) counter++;
+
+            if (counter % 2 == 0 && counter > 50 && playerW < 50) {
+                playerW = playerH = playerW + counter / 2;
+                playerX = ScreenCenterX - (playerW / 2);
+                playerY = ScreenCenterY - (playerH / 2);
+            } else if (counter > 50 && playerW > 50) {
+                playerW = playerH = 50;
+                controlsAreLocked = false;
+            }
+            if (!controlsAreLocked) {
+                if (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.A))
+                    playerX = playerX > 0 ? playerX - 5 : playerX;
+                if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D))
+                    playerX = playerX < ScreenWidth - playerW ? playerX + 5 : playerX;
+                if (Keyboard.GetState().IsKeyDown(Keys.Up) || Keyboard.GetState().IsKeyDown(Keys.W))
+                    playerY = playerY > 0 ? playerY - 5 : playerY;
+                if (Keyboard.GetState().IsKeyDown(Keys.Down) || Keyboard.GetState().IsKeyDown(Keys.S))
+                    playerY = playerY < ScreenHeight - playerH ? playerY + 5 : playerY;
+            }
+        }
+        #endregion
     }
 }
