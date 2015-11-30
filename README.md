@@ -15,6 +15,8 @@ Developed by [Matheus Avellar](http://m.avellar.ml/) and [João Ricardo](https:/
 
 ##### Devlog
 
+* Nov 30 2015 - The TileMap Unity 5 update is only coming around June 2016. It's highly unlikely that we wait all that time. However, we were looking into the Lua language, and some other game engines. So nothing here's for sure; We might end up switching from MonoGame to a different platform.
+
 
 * Nov 29 2015 - MonoGame version development has begun; However, Unity 5 has promising features we might take a lot of advantages in using.
 So, what do we do now? Do we stay in MonoGame or do we migrate back to Unity, except this time v5 instead of v4? :sob:
