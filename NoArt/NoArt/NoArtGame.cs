@@ -70,7 +70,6 @@ namespace NoArt
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
             PoiretOne = Content.Load<SpriteFont>("Fonts\\PoiretOne");
-            bg = Content.Load<Texture2D>("Images\\w");
 
             GameWidth = graphics.GraphicsDevice.Viewport.Width;
             GameHeight = graphics.GraphicsDevice.Viewport.Height;
@@ -160,7 +159,6 @@ namespace NoArt
         void drawGame(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.LightGray);
-
             spriteBatch.Draw(bg, new Rectangle(playerX, playerY, playerW, playerH), null, Color.Gray, 0f, Vector2.Zero, SpriteEffects.None, 0.5f);
         }
         void updateGame(GameTime gameTime)
